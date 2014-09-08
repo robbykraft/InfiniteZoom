@@ -42,7 +42,7 @@ void draw(){
   
   for(int i = -2; i <= 2; i++){
     float thisAltitude = pow(10,-(zoom+i-zoomLevel-2));
-    float scale = ((thisAltitude-i)*room);
+    float scale = thisAltitude*room;
     println(scale);
     ellipse(width*.66, height*.5 + scale, 30, 30);
   }
