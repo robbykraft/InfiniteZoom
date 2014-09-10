@@ -414,6 +414,7 @@
 				D5EFCB1F19C0A61500D35AE1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D5EFCB2019C0A61500D35AE1 /* Build configuration list for PBXNativeTarget "InfiniteZoomTests" */ = {
 			isa = XCConfigurationList;
@@ -422,6 +423,7 @@
 				D5EFCB2219C0A61500D35AE1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
