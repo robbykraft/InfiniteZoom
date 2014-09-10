@@ -21,7 +21,7 @@ void update(){
   levelProgress = zoom - zoomLevel;
   altitude = pow(10,-zoom);
   levelAltitude = pow(10,-levelProgress);
-  // log10(altitude) = zoom
+
 }
 
 void draw(){
@@ -36,14 +36,12 @@ void draw(){
   
   for(int i = -2; i <= 2; i++){
     float scale = ((i+(1-levelProgress))*room);
-    println(scale);
     ellipse(width*.33, height*.5 + scale, 30, 30);
   }
   
   for(int i = -2; i <= 2; i++){
-    float thisAltitude = pow(10,-(zoom+i-zoomLevel-2));
-    float scale = thisAltitude*room;
-    println(scale);
+    float thisAltitude = pow(10,-(zoom+i-zoomLevel-1));
+    float scale = thisAltitude;
     ellipse(width*.66, height*.5 + scale, 30, 30);
   }
 
@@ -51,6 +49,7 @@ void draw(){
   text(zoomLevel, 20, 60);
   ellipse(1,height - altitude*height,30,30);
   ellipse(width-1,height - levelAltitude*height,30,30);
+  line(0, height, width*(1-levelAltitude)/.9, height);
 }
 
 
