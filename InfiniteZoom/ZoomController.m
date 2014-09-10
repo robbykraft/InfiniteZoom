@@ -226,11 +226,15 @@ GLfloat quadVertexData[12] = {
     // Render the object with GLKit
     [self.effect prepareToDraw];
 
+    glPushMatrix();
     
-    for(int levels = 0; levels < 2; levels++){
+    for(int levels = -1; levels < 3; levels++){
 
+        float altitude = pow(10,-(levelProgress+levels));
+        
         glPushMatrix();
-        glTranslatef(0.0f, 0.0, -1.0+levelProgress*1 - levels);
+        glTranslatef(0.0f, 0.0, -altitude);
+//        glTranslatef(0.0f, 0.0, -1.0+levelProgress*1 - levels);
         //    glTranslatef(sinf(elapsedSeconds)*4, 0.0f, 0.0f);
         glTranslatef(0.0f, position, 0.0f);
         
@@ -248,8 +252,9 @@ GLfloat quadVertexData[12] = {
             glPopMatrix();
         }
         glPopMatrix();
-        
+        glScalef(1/(altitude*altitude), 1/(altitude*altitude), 1/(altitude*altitude));
     }
+    glPopMatrix();
 }
 
 @end
