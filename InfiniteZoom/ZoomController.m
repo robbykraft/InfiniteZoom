@@ -10,7 +10,7 @@
 #import <OpenGLES/ES1/gl.h>
 
 #define Z_NEAR .01f
-#define Z_FAR 100.0f
+#define Z_FAR 1000.0f
 
 GLfloat quadVertexData[12] = {
     -0.1f, 0.1f, 0.0f,
@@ -191,7 +191,6 @@ GLfloat quadVertexData[12] = {
     float zoom = elapsedSeconds / 5.0;
     zoomLevel = (int)zoom;
     levelProgress = zoom - zoomLevel;
-
     
     if(leftButton) velocity = -.005f;
     else if(rightButton) velocity = .005f;
@@ -228,15 +227,18 @@ GLfloat quadVertexData[12] = {
 
     glPushMatrix();
     
-    for(int levels = -1; levels < 3; levels++){
+    for(int levels = 0; levels < 3; levels++){
 
         float altitude = pow(10,-(levelProgress+levels));
+        float scale = pow(10,(levelProgress+levels));
         
         glPushMatrix();
-        glTranslatef(0.0f, 0.0, -altitude);
+        glTranslatef(0.0f, 0.0, -2);
+        glScalef(scale*.5, scale*.5, scale*.5);
+//        glTranslatef(0.0f, 0.0, -altitude);
 //        glTranslatef(0.0f, 0.0, -1.0+levelProgress*1 - levels);
-        //    glTranslatef(sinf(elapsedSeconds)*4, 0.0f, 0.0f);
-        glTranslatef(0.0f, position, 0.0f);
+//        glTranslatef(sinf(elapsedSeconds)*4, 0.0f, 0.0f);
+        glTranslatef(0.0f, 10*position*altitude, 0.0f);
         
         int RADIX = 8;
         for(int i = 0; i <= RADIX; i++){
@@ -252,7 +254,6 @@ GLfloat quadVertexData[12] = {
             glPopMatrix();
         }
         glPopMatrix();
-        glScalef(1/(altitude*altitude), 1/(altitude*altitude), 1/(altitude*altitude));
     }
     glPopMatrix();
 }
