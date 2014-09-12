@@ -21,8 +21,8 @@ void update(){
   zoomLevel = (int)zoom;
 
   levelProgress = zoom - zoomLevel;
-  altitude = pow(10,-zoom);
-  levelAltitude = pow(10,-levelProgress);
+  altitude = pow(RADIX,-zoom);
+  levelAltitude = pow(RADIX,-levelProgress);
 
 }
 

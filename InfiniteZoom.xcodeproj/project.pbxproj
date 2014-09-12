@@ -14,45 +14,24 @@
 		D5EFCB0919C0A61500D35AE1 /* ZoomController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5EFCB0819C0A61500D35AE1 /* ZoomController.m */; };
 		D5EFCB0C19C0A61500D35AE1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5EFCB0A19C0A61500D35AE1 /* Main.storyboard */; };
 		D5EFCB0E19C0A61500D35AE1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5EFCB0D19C0A61500D35AE1 /* Images.xcassets */; };
-		D5EFCB1A19C0A61500D35AE1 /* InfiniteZoomTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D5EFCB1919C0A61500D35AE1 /* InfiniteZoomTests.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		D5EFCB1419C0A61500D35AE1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D5EFCAF119C0A61500D35AE1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D5EFCAF819C0A61500D35AE1;
-			remoteInfo = InfiniteZoom;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		D5EFCAF919C0A61500D35AE1 /* InfiniteZoom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InfiniteZoom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5EFCAFD19C0A61500D35AE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D5EFCAFE19C0A61500D35AE1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		D5EFCB0019C0A61500D35AE1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		D5EFCB0119C0A61500D35AE1 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		D5EFCB0319C0A61500D35AE1 /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.fsh; path = Shaders/Shader.fsh; sourceTree = "<group>"; };
-		D5EFCB0519C0A61500D35AE1 /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.vsh; path = Shaders/Shader.vsh; sourceTree = "<group>"; };
-		D5EFCB0719C0A61500D35AE1 /* ZoomController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZoomController.h; sourceTree = "<group>"; };
-		D5EFCB0819C0A61500D35AE1 /* ZoomController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZoomController.m; sourceTree = "<group>"; };
+		D5EFCB0019C0A61500D35AE1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../iOS/AppDelegate.h; sourceTree = "<group>"; };
+		D5EFCB0119C0A61500D35AE1 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = ../iOS/AppDelegate.m; sourceTree = "<group>"; };
+		D5EFCB0319C0A61500D35AE1 /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.fsh; path = ../iOS/Shaders/Shader.fsh; sourceTree = "<group>"; };
+		D5EFCB0519C0A61500D35AE1 /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.vsh; path = ../iOS/Shaders/Shader.vsh; sourceTree = "<group>"; };
+		D5EFCB0719C0A61500D35AE1 /* ZoomController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ZoomController.h; path = ../iOS/ZoomController.h; sourceTree = "<group>"; };
+		D5EFCB0819C0A61500D35AE1 /* ZoomController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ZoomController.m; path = ../iOS/ZoomController.m; sourceTree = "<group>"; };
 		D5EFCB0B19C0A61500D35AE1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D5EFCB0D19C0A61500D35AE1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		D5EFCB1319C0A61500D35AE1 /* InfiniteZoomTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InfiniteZoomTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D5EFCB1819C0A61500D35AE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D5EFCB1919C0A61500D35AE1 /* InfiniteZoomTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InfiniteZoomTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		D5EFCAF619C0A61500D35AE1 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D5EFCB1019C0A61500D35AE1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -66,7 +45,6 @@
 			isa = PBXGroup;
 			children = (
 				D5EFCAFB19C0A61500D35AE1 /* InfiniteZoom */,
-				D5EFCB1619C0A61500D35AE1 /* InfiniteZoomTests */,
 				D5EFCAFA19C0A61500D35AE1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -75,7 +53,6 @@
 			isa = PBXGroup;
 			children = (
 				D5EFCAF919C0A61500D35AE1 /* InfiniteZoom.app */,
-				D5EFCB1319C0A61500D35AE1 /* InfiniteZoomTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -93,7 +70,7 @@
 				D5EFCB0D19C0A61500D35AE1 /* Images.xcassets */,
 				D5EFCAFC19C0A61500D35AE1 /* Supporting Files */,
 			);
-			path = InfiniteZoom;
+			path = iOS;
 			sourceTree = "<group>";
 		};
 		D5EFCAFC19C0A61500D35AE1 /* Supporting Files */ = {
@@ -101,23 +78,6 @@
 			children = (
 				D5EFCAFD19C0A61500D35AE1 /* Info.plist */,
 				D5EFCAFE19C0A61500D35AE1 /* main.m */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		D5EFCB1619C0A61500D35AE1 /* InfiniteZoomTests */ = {
-			isa = PBXGroup;
-			children = (
-				D5EFCB1919C0A61500D35AE1 /* InfiniteZoomTests.m */,
-				D5EFCB1719C0A61500D35AE1 /* Supporting Files */,
-			);
-			path = InfiniteZoomTests;
-			sourceTree = "<group>";
-		};
-		D5EFCB1719C0A61500D35AE1 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				D5EFCB1819C0A61500D35AE1 /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -142,24 +102,6 @@
 			productReference = D5EFCAF919C0A61500D35AE1 /* InfiniteZoom.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D5EFCB1219C0A61500D35AE1 /* InfiniteZoomTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D5EFCB2019C0A61500D35AE1 /* Build configuration list for PBXNativeTarget "InfiniteZoomTests" */;
-			buildPhases = (
-				D5EFCB0F19C0A61500D35AE1 /* Sources */,
-				D5EFCB1019C0A61500D35AE1 /* Frameworks */,
-				D5EFCB1119C0A61500D35AE1 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				D5EFCB1519C0A61500D35AE1 /* PBXTargetDependency */,
-			);
-			name = InfiniteZoomTests;
-			productName = InfiniteZoomTests;
-			productReference = D5EFCB1319C0A61500D35AE1 /* InfiniteZoomTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -171,10 +113,6 @@
 				TargetAttributes = {
 					D5EFCAF819C0A61500D35AE1 = {
 						CreatedOnToolsVersion = 6.0;
-					};
-					D5EFCB1219C0A61500D35AE1 = {
-						CreatedOnToolsVersion = 6.0;
-						TestTargetID = D5EFCAF819C0A61500D35AE1;
 					};
 				};
 			};
@@ -192,7 +130,6 @@
 			projectRoot = "";
 			targets = (
 				D5EFCAF819C0A61500D35AE1 /* InfiniteZoom */,
-				D5EFCB1219C0A61500D35AE1 /* InfiniteZoomTests */,
 			);
 		};
 /* End PBXProject section */
@@ -209,13 +146,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D5EFCB1119C0A61500D35AE1 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -229,23 +159,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D5EFCB0F19C0A61500D35AE1 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D5EFCB1A19C0A61500D35AE1 /* InfiniteZoomTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		D5EFCB1519C0A61500D35AE1 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D5EFCAF819C0A61500D35AE1 /* InfiniteZoom */;
-			targetProxy = D5EFCB1419C0A61500D35AE1 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		D5EFCB0A19C0A61500D35AE1 /* Main.storyboard */ = {
@@ -254,6 +168,7 @@
 				D5EFCB0B19C0A61500D35AE1 /* Base */,
 			);
 			name = Main.storyboard;
+			path = ../iOS;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -342,7 +257,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				INFOPLIST_FILE = InfiniteZoom/Info.plist;
+				INFOPLIST_FILE = iOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -353,45 +268,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				INFOPLIST_FILE = InfiniteZoom/Info.plist;
+				INFOPLIST_FILE = iOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
-		D5EFCB2119C0A61500D35AE1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/InfiniteZoom.app/InfiniteZoom";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = InfiniteZoomTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				METAL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-			};
-			name = Debug;
-		};
-		D5EFCB2219C0A61500D35AE1 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/InfiniteZoom.app/InfiniteZoom";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = InfiniteZoomTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				METAL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Release;
 		};
@@ -412,15 +291,6 @@
 			buildConfigurations = (
 				D5EFCB1E19C0A61500D35AE1 /* Debug */,
 				D5EFCB1F19C0A61500D35AE1 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		D5EFCB2019C0A61500D35AE1 /* Build configuration list for PBXNativeTarget "InfiniteZoomTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D5EFCB2119C0A61500D35AE1 /* Debug */,
-				D5EFCB2219C0A61500D35AE1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

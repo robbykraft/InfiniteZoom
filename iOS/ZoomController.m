@@ -217,7 +217,7 @@ GLfloat quadVertexData[12] = {
     
 }
 
-#define RADIX 9
+#define RADIX 5
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
@@ -229,7 +229,7 @@ GLfloat quadVertexData[12] = {
 
     glPushMatrix();
     
-    for(int levels = 0; levels < 3; levels++){
+    for(int levels = -1; levels < 3; levels++){
 
         float altitude = pow(RADIX,-(levelProgress+levels));
         float scale = pow(RADIX,(levelProgress+levels));
@@ -246,7 +246,7 @@ GLfloat quadVertexData[12] = {
             glTranslatef(0, 0, .1);
             glTranslatef(0, gap-.5, 0);
             glRotatef(90, 1, 0, 0);
-            glColor4f(i/8.0, 0.5f-i/16.0, 1.0f, 1.0f);
+            glColor4f(i/(float)RADIX, 0.5f-i/(RADIX*2.0), 1.0f, 1.0f);
             glEnableClientState(GL_VERTEX_ARRAY);
             glVertexPointer(3, GL_FLOAT, 0, quadVertexData);
             glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
