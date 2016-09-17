@@ -1,11 +1,11 @@
 # Linux (default)
-EXE = world
+EXE = scale
 CFLAGS = -std=gnu99
 LDFLAGS = -lGL -lGLU -lglut -lm
 
 # Windows (cygwin)
 ifeq "$(OS)" "Windows_NT"
-	EXE = world.exe
+	EXE = scale.exe
 	LDFLAGS = -lopengl32 -lglu32 -lglut32
 endif
 
@@ -18,5 +18,8 @@ ifeq ($(OSTYPE),darwin)
 	LDFLAGS = -framework Carbon -framework OpenGL -framework GLUT  -Wno-deprecated
 endif
 
-$(EXE) : world.c
+$(EXE): scale.c
 	gcc -o $@ $< $(CFLAGS) $(LDFLAGS)
+
+run:
+	./$(EXE) $(ARGS)

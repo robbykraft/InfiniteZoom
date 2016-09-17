@@ -42,7 +42,7 @@ class ZoomController{
     // @property (strong, nonatomic) ;
     EAGLContext *_context;
     GLKBaseEffect *_effect;
-}
+};
 
 void setupGL();
 void tearDownGL();
@@ -136,8 +136,8 @@ void setupGame(){
 }
 
 
-void touchesBeganWithEvent(NSSet *touches, UIEvent * event){
-    for(UITouch *touch in event.allTouches() ){
+void touchesBeganWithEvent(Set *touches, Event * event){
+    for(Touch *touch in event.allTouches() ){
         if(touch.locationInView() self.view].y < self.view.bounds.size.height*.5){
             leftButton = true;
         }
@@ -148,12 +148,10 @@ void touchesBeganWithEvent(NSSet *touches, UIEvent * event){
 //    NSLog(@"(%d) L:%d  R:%d", event.allTouches()  count], leftButton, rightButton);
 }
 
--(void) touchesEndedWithEvent:(NSSet *touches, UIEvent *event){
-
-
+void touchesEndedWithEvent(Set *touches, Event *event){
     BOOL checkLeft = false;
     BOOL checkRight = false;
-    for(UITouch *touch in event.allTouches() ){
+    for(Touch *touch in event.allTouches() ){
         if(!touches.anyObject()  isEqual:touch]){
             if(touch.locationInView() self.view].y < self.view.bounds.size.height*.5){
                 checkLeft = true;
@@ -166,7 +164,7 @@ void touchesBeganWithEvent(NSSet *touches, UIEvent * event){
     leftButton = checkLeft;
     rightButton = checkRight;
 
-//    for(UITouch *touch in [event allTouches]){
+//    for(Touch *touch in [event allTouches]){
 //        if([touch locationInView:self.view].y < self.view.bounds.size.height*.5){
 //            leftButton = false;
 //        }
