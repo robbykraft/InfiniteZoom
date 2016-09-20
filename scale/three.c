@@ -20,7 +20,7 @@ void initLighting(){
 	GLfloat light_position0[] = { 3.0, 4.0, 0.0, 1.0 };
 	GLfloat light_position1[] = { -7.0, -3.0, 0.0, 1.0 };
 	GLfloat light_position2[] = { -3.0, -7.0, 16.0, 1.0 };
-	
+
 	GLfloat spot_direction0[] = { -3.0, -4.0, -10.0 };
 	GLfloat spot_direction1[] = { 7.0, 3.0, 0.0 };
 	GLfloat spot_direction2[] = { 6.0, 3.0, 0.1 };
@@ -64,7 +64,6 @@ void initLighting(){
 	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHT1);
 	glEnable(GL_LIGHT2);
-
 }
 
 void drawCelestialLines(){
@@ -131,7 +130,7 @@ void drawZoomboard(){
 	glPopMatrix();
 }
 
-void repeating3DScene(){
+void repeating3DScene(float brightness){
 	GLfloat materialColor[] = {1.0, 1.0, 1.0, 1.0};
 	GLfloat black[] = {0.0, 0.0, 0.0, 1.0};
 	GLfloat mostlyBlack[] = {0.1, 0.1, 0.1, 1.0};
@@ -139,6 +138,8 @@ void repeating3DScene(){
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, materialColor);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, black);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mostlyBlack);
+
+	glColor3f(brightness, brightness, brightness);
 
 	float W = 9.0;
 	float TALL = 1.0;
@@ -153,15 +154,19 @@ void repeating3DScene(){
 	// inner walls
 	glPushMatrix();
 		glRotatef(90, 0, 1, 0);
+		glColor3f(brightness*0.5, brightness*0.5, brightness*0.5);
 		glTranslatef(-TALL, -barW*0.5, barW*0.5);
 		drawRect(0, 0, 0, TALL, barW);
 		glRotatef(-90, 1, 0, 0);
+		glColor3f(brightness*0.3, brightness*0.3, brightness*0.3);
 		drawRect(0, 0, 0, TALL, barW);
 		glPushMatrix();
 			glTranslatef(0, spaceW, spaceW);
 			glRotatef(-90, 1, 0, 0);
+			glColor3f(brightness*0.2, brightness*0.2, brightness*0.2);
 			drawRect(0, 0, 0, TALL, barW);
 			glRotatef(-90, 1, 0, 0);
+			glColor3f(brightness*0.4, brightness*0.4, brightness*0.4);
 			drawRect(0, 0, 0, TALL, barW);
 		glPopMatrix();
 	glPopMatrix();
@@ -212,11 +217,14 @@ void update(){
 
 void draw3D(){ 
 
+	glDisable(GL_LIGHTING);
 	glTranslatef(0.0, 0.0, -0.3);
 	glPushMatrix();
-		glScalef(10, 10, 10);
+		glScalef(100, 100, 100);
 		drawCelestialLines();
 	glPopMatrix();
+
+	// glEnable(GL_LIGHTING);
 
 	// int whole = originX/3.0;
 	// float zoom = (originX-whole);
@@ -236,17 +244,17 @@ void draw3D(){
 
 
 	glPushMatrix();
+		glScalef(30, 30, 30);
 		glScalef(zoomCycle, zoomCycle, zoomCycle);
-		int iterations = 12;
+		int iterations = 15;
 		// subdivisions of space, zooming will repeat on the center one
 		//    eg. ternary cantor set would be 3
 		for(int i = 0; i < iterations; i++){
 			glPushMatrix();
 			float scale = powf(INTERVAL, i);
 			float color = (i-linearCycle)/iterations;
-			glColor3f(color*0.75 + 0.25, color*0.75 + 0.25, color*0.75 + 0.25);
 			glScalef(1.0/scale, 1.0/scale, 1.0/scale);
-			repeating3DScene();
+			repeating3DScene(color*0.75+0.25);
 			glPopMatrix();
 		}
 	glPopMatrix();
