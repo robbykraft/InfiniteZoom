@@ -1,11 +1,13 @@
 # Linux (default)
-EXE = scale
+EXE2 = two
+EXE3 = three
 CFLAGS = -std=gnu99
 LDFLAGS = -lGL -lGLU -lglut -lm
 
 # Windows (cygwin)
 ifeq "$(OS)" "Windows_NT"
-	EXE = scale.exe
+	EXE2 = two.exe
+	EXE3 = three.exe
 	LDFLAGS = -lopengl32 -lglu32 -lglut32
 endif
 
@@ -18,8 +20,16 @@ ifeq ($(OSTYPE),darwin)
 	LDFLAGS = -framework Carbon -framework OpenGL -framework GLUT  -Wno-deprecated
 endif
 
-$(EXE): scale.c
+all: two three
+
+$(EXE2): two.c
 	gcc -o $@ $< $(CFLAGS) $(LDFLAGS)
 
-run:
-	./$(EXE) $(ARGS)
+$(EXE3): three.c
+	gcc -o $@ $< $(CFLAGS) $(LDFLAGS)
+
+run2:
+	./$(EXE2) $(ARGS)
+
+run3:
+	./$(EXE3) $(ARGS)
