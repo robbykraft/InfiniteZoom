@@ -13,7 +13,8 @@ static double unused;
 
 void repeating2DScene(){
 	float spaceW = (float)WIDTH/INTERVAL;
-	float barW = (WIDTH-INTERVAL)*0.5;
+	float barW = (WIDTH-INTERVAL)*0.33;
+	drawRect(-spaceW*0.5+2, -HEIGHT*0.25, 0, barW, HEIGHT*0.25);
 	drawRect(-barW-spaceW*0.5, -HEIGHT*0.25, 0, barW, HEIGHT*0.25);
 	drawRect(+spaceW*0.5, -HEIGHT*0.25, 0, barW, HEIGHT*0.25);
 }
@@ -67,22 +68,27 @@ void draw2D(){
 	drawHUD();
 
 	// GROUND
+	glColor3f(1.0, 0.0, 0.0);
+	drawLine(WIDTH*0.5, HEIGHT*0.75, 0.0, WIDTH*0.5, HEIGHT, 0.0);
 	glColor3f(1.0, 1.0, 1.0);
 	glTranslatef(WIDTH*0.5, HEIGHT*0.75, 0.0f);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	drawRect(-WIDTH*0.5, 0, 0, WIDTH, WIDTH*0.5);
 	glBindTexture (GL_TEXTURE_2D, 0);
 
+	glScalef(3, 3, 3);
+
 	glPushMatrix();
 
 		glScalef(zoomCycle, zoomCycle, zoomCycle);
+		glTranslatef(originX*5, 0, 0);
 
 		int iterations = 7;
 
 		// subdivisions of space, zooming will repeat on the center one
 		//    eg. ternary cantor set would be 3
 
-		for(int i = 0; i < iterations; i++){
+		for(int i = iterations-1; i >= 0; i--){
 			glPushMatrix();
 			float scale = powf(INTERVAL, i);
 			float color = (i-linearCycle)/iterations;

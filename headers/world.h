@@ -546,14 +546,18 @@ float modulusContext(float complete, int modulus){
 	return ( ((int)wholePart) % modulus ) + fracPart;
 }
 void drawPoint(float x, float y, float z){
-	static const GLfloat _zero_point_vertex[] = { 0.0f, 0.0f, 0.0f };
-	glPushMatrix();
-		glTranslatef(x, y, z);
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glVertexPointer(3, GL_FLOAT, 0, _zero_point_vertex);
-		glDrawArrays(GL_POINTS, 0, 1);
-		glDisableClientState(GL_VERTEX_ARRAY);
-	glPopMatrix();
+	GLfloat _point_vertex[] = { x, y, z };
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, _point_vertex);
+	glDrawArrays(GL_POINTS, 0, 1);
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+void drawLine(float x1, float y1, float z1, float x2, float y2, float z2){
+	GLfloat _lines_vertices[6] = {x1, y1, z1, x2, y2, z2};
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, _lines_vertices);
+	glDrawArrays(GL_LINES, 0, 2);
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
 void drawUnitOriginSquare(){
 	static const GLfloat _unit_square_vertex[] = {
@@ -572,12 +576,29 @@ void drawUnitOriginSquare(){
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
+// void drawRect(float x, float y, float z, float width, float height){
+// 	glPushMatrix();
+// 		glTranslatef(x, y, z);
+// 		glScalef(width, height, 1.0);
+// 		drawUnitOriginSquare();
+// 	glPopMatrix();
+// }
 void drawRect(float x, float y, float z, float width, float height){
-	glPushMatrix();
-		glTranslatef(x, y, z);
-		glScalef(width, height, 1.0);
-		drawUnitOriginSquare();
-	glPopMatrix();
+	GLfloat _rect_vertex[] = {
+		x, y + height, z,     x + width, y + height, z,    x, y, z,    x + width, y, z };
+	static const GLfloat _unit_square_normals[] = {
+		0.0f, 0.0f, 1.0f,     0.0f, 0.0f, 1.0f,    0.0f, 0.0f, 1.0f,    0.0f, 0.0f, 1.0f };
+	static const GLfloat _texture_coordinates[] = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f };
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);  
+	glVertexPointer(3, GL_FLOAT, 0, _rect_vertex);
+	glNormalPointer(GL_FLOAT, 0, _unit_square_normals);
+	glTexCoordPointer(2, GL_FLOAT, 0, _texture_coordinates);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 void drawUnitSquare(float x, float y, float z){
 	glPushMatrix();

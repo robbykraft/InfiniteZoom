@@ -13,7 +13,7 @@ static double unused;
 
 void repeating2DScene(){
 	float spaceW = (float)WIDTH/INTERVAL;
-	float barW = (WIDTH-INTERVAL)*0.5;
+	float barW = (WIDTH-INTERVAL)*0.33;
 	drawRect(-barW-spaceW*0.5, -HEIGHT*0.25, 0, barW, HEIGHT*0.25);
 	drawRect(+spaceW*0.5, -HEIGHT*0.25, 0, barW, HEIGHT*0.25);
 }
