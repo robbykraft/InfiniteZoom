@@ -11,23 +11,31 @@ float SPEED = 0.2;
 
 static double unused;
 
-void repeating2DScene(){
+void repeating2DScene(float brightness, unsigned char highlight){ //0 for none, 1/2/3 for left/mid/right
 	float spaceW = (float)WIDTH/INTERVAL;
 	float barW = (WIDTH-INTERVAL)*0.33;
-	drawRect(-spaceW*0.5+2, -HEIGHT*0.25, 0, barW, HEIGHT*0.25);
-	drawRect(-barW-spaceW*0.5, -HEIGHT*0.25, 0, barW, HEIGHT*0.25);
-	drawRect(+spaceW*0.5, -HEIGHT*0.25, 0, barW, HEIGHT*0.25);
+	if(highlight == 1) 	glColor3f(brightness, 0, 0);
+	else                glColor3f(brightness, brightness, brightness);
+	drawRect(-barW-spaceW*0.5, -HEIGHT*0.25, 0, barW, HEIGHT*0.25);// middle
+	if(highlight == 2) 	glColor3f(brightness, 0, 0);
+	else                glColor3f(brightness, brightness, brightness);
+	drawRect(-spaceW*0.5+2, -HEIGHT*0.25, 0, barW, HEIGHT*0.25);   // left
+	if(highlight == 3) 	glColor3f(brightness, 0, 0);
+	else                glColor3f(brightness, brightness, brightness);
+	drawRect(+spaceW*0.5, -HEIGHT*0.25, 0, barW, HEIGHT*0.25);     // right
 }
 
 void drawHUD(){
 	float thirdW = WIDTH * 0.33;
 	// HUD
 	glColor3f(1.0, 1.0, 1.0);
-	char zoomReport[50], zoomReport2[50], oneMinusInterval[50], intervalAsFloat[50];
+	char zoomReport[50], zoomReport2[50], transReport[50], oneMinusInterval[50], intervalAsFloat[50];
 	sprintf(zoomReport, "LINEAR (X): %.2f (%.2f)", linearCycle, originY*SPEED);
 	text(zoomReport, 4, 18, 0);
 	sprintf(zoomReport2, "%d ^ X: %.2f", INTERVAL, zoomCycle);
 	text(zoomReport2, 4, 37, 0);
+	sprintf(transReport, "TRANSLATION: %.2f", originX);
+	text(transReport, 4, 53, 0);
 
 	glColor3f(1.0, 1.0, 1.0);
 	text("1.0", thirdW*1.5 - 5, 18, 0);
@@ -59,13 +67,18 @@ void update(){
 	float increasing = originY * SPEED;
 	linearCycle = modf(increasing, &unused);
 	zoomCycle = powf(INTERVAL, linearCycle);
+
+	originX = sinf(frameNum * 0.015)*3.5;
 }
 
 void draw3D(){ }
 
 void draw2D(){
+	char thisReport[9][50];
 
 	drawHUD();
+
+	glPushMatrix();
 
 	// GROUND
 	glColor3f(1.0, 0.0, 0.0);
@@ -76,29 +89,66 @@ void draw2D(){
 	drawRect(-WIDTH*0.5, 0, 0, WIDTH, WIDTH*0.5);
 	glBindTexture (GL_TEXTURE_2D, 0);
 
-	glScalef(3, 3, 3);
-
 	glPushMatrix();
+		glScalef(3, 3, 3);
 
-		glScalef(zoomCycle, zoomCycle, zoomCycle);
-		glTranslatef(originX*5, 0, 0);
+		glPushMatrix();
 
-		int iterations = 7;
+			glScalef(zoomCycle, zoomCycle, zoomCycle);
+			glTranslatef(-originX*5, 0, 0);
 
-		// subdivisions of space, zooming will repeat on the center one
-		//    eg. ternary cantor set would be 3
+			int iterations = 7;
 
-		for(int i = iterations-1; i >= 0; i--){
-			glPushMatrix();
-			float scale = powf(INTERVAL, i);
-			float color = (i-linearCycle)/iterations;
-			glColor3f(color*0.75 + 0.25, color*0.75 + 0.25, color*0.75 + 0.25);
-			glScalef(1.0/scale, 1.0/scale, 1.0/scale);
-			repeating2DScene();
-			glPopMatrix();
-		}
+			// for(int i = 6; i >= 3; i--){
+			// 	glPushMatrix();
+			// 	float scale = powf(INTERVAL, i);
+			// 	float color = (i-linearCycle)/iterations;
+			// 	glScalef(1.0/scale, 1.0/scale, 1.0/scale);
+			// 	glTranslatef(WIDTH*0.33, 0, 0);
+			// 	repeating2DScene(color*0.75 + 0.25, 0);
+			// 	glPopMatrix();
+			// }
 
+			// subdivisions of space, zooming will repeat on the center one
+			//    eg. ternary cantor set would be 3
+			// for(int i = iterations-1; i >= 0; i--){
+			for(int i = 4; i >= 1; i--){
+				glPushMatrix();
+				float scale = powf(INTERVAL, i);
+				float color = (i-linearCycle)/iterations;
+				glColor3f(color*0.75 + 0.25, color*0.75 + 0.25, color*0.75 + 0.25);
+				glScalef(1.0/scale, 1.0/scale, 1.0/scale);
+				// stuff here
+				float thisW = powf(INTERVAL, 4-i);
+				unsigned char highlight = 0;
+				float transX = originX;
+				float secW = 0;
+				if(transX > -thisW && transX < thisW){
+					// highlight = 2;
+					secW = thisW / INTERVAL;
+					if(transX < secW && transX > -secW)
+						highlight = 2;
+					if(transX < -secW)// && transX > -secW*1.5)
+						highlight = 1;
+					if(transX > secW)// && transX > -secW*0.5)
+						highlight = 3;
+				}
+
+				sprintf(thisReport[i], "(%d): SEC: %.2f  THISW: %.2f   SCALE:%.2f", i, secW, thisW, scale);
+
+				
+				repeating2DScene(color*0.75 + 0.25, highlight);
+				glPopMatrix();
+			}
+
+		glPopMatrix();
 	glPopMatrix();
+	glPopMatrix();
+	glColor3f(1.0, 1.0, 1.0);
+	for(int i = 4; i >= 1; i--){
+		text(thisReport[i], 4, 68 + i*16, 0);
+	}
+
 }
 void keyDown(unsigned int key){ }
 void keyUp(unsigned int key){ }

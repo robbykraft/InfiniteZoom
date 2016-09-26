@@ -44,7 +44,7 @@ void mouseMoved(int x, int y);
 // CUSTOMIZE SETTINGS
 #define CONTINUOUS_REFRESH 1  // (0) = maximum efficiency, screen can redraw only upon receiving input
 static float MOUSE_SENSITIVITY = 0.333f;
-static float WALK_INTERVAL = 0.1f;  // WALKING SPEED. @ 60 updates/second, walk speed = 6 units/second
+static float WALK_INTERVAL = 0.04f;  // WALKING SPEED. @ 60 updates/second, walk speed = 6 units/second
 static float ZOOM_SPEED = 0.4f;
 // WINDOW size upon boot
 static int WIDTH = 800;  // (readonly) set these values here
