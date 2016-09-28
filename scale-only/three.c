@@ -204,8 +204,8 @@ void drawHUD(){
 }
 
 void setup(){ 
-	// texture = loadTexture("../bin/texture.raw", 32, 32);
-	texture = loadTexture("../bin/stripes512-256.raw", 512, 256);
+	// texture = loadTexture("../resources/texture.raw", 32, 32);
+	texture = loadTexture("../resources/stripes512-256.raw", 512, 256);
 	initLighting();
 }
 

@@ -69,8 +69,8 @@ void drawHUD(){
 }
 
 void setup(){ 
-	// texture = loadTexture("../bin/texture.raw", 32, 32);
-	texture = loadTexture("../bin/stripes512-256.raw", 512, 256);
+	// texture = loadTexture("../resources/texture.raw", 32, 32);
+	texture = loadTexture("../resources/stripes512-256.raw", 512, 256);
 }
 
 void update(){ 
@@ -85,13 +85,23 @@ void update(){
 }
 
 
+float offsets[20];
+
+
+int TOP_I = 2;
+int BOTTOM_I = 0;
+
+	char shiftString[50];
+
 void draw3D(){ }
 
 void draw2D(){
 	glColor3f(1.0, 1.0, 1.0);
-	for(int i = 2; i >= 0; i--){
-		text(zoomReports[i], 4, 68 + i*16, 0);
+	for(int i = TOP_I; i >= BOTTOM_I; i--){
+		text(zoomReports[i], 10, 68 + i*16, 0);
 	}
+
+
 	drawHUD();
 
 	// GROUND
@@ -107,59 +117,82 @@ void draw2D(){
 
 	glColor3f(1.0, 1.0, 1.0);
 
-	glTranslatef(WIDTH*0.5, HEIGHT*0.75, 0.0f);
-	glScalef(WIDTH, WIDTH, WIDTH);
-
 	glPushMatrix();
-		glScalef(zoomCycle, zoomCycle, zoomCycle);
-		glTranslatef(-transX, 0, 0);
 
-		int iterations = 7;
+		glTranslatef(WIDTH*0.5, HEIGHT*0.75, 0.0f);
+		glScalef(WIDTH, WIDTH, WIDTH);
 
-		// for(int i = 6; i >= 3; i--){
-		// 	glPushMatrix();
-		// 	float scale = powf(INTERVAL, i);
-		// 	float color = (i-linearCycle)/iterations;
-		// 	glScalef(1.0/scale, 1.0/scale, 1.0/scale);
-		// 	glTranslatef(WIDTH*0.33, 0, 0);
-		// 	repeating2DScene(color*0.75 + 0.25, 0);
-		// 	glPopMatrix();
-		// }
+		sprintf(shiftString, "");
 
-		// subdivisions of space, zooming will repeat on the center one
-		//    eg. ternary cantor set would be 3
-		// for(int i = iterations-1; i >= 0; i--){
-		for(int i = 2; i >= 0; i--){
-			glPushMatrix();
-			float scale = powf(INTERVAL, i);
-			float color = (i-linearCycle)/iterations;
-			glColor3f(color*0.75 + 0.25, color*0.75 + 0.25, color*0.75 + 0.25);
-			glScalef(1.0/scale, 1.0/scale, 1.0/scale);
-			// stuff here
-			// float thisW = powf(INTERVAL, 3.5-i);
-			float thisW = 1.0/powf(INTERVAL, i) * 0.5;
+		glPushMatrix();
+			glScalef(zoomCycle, zoomCycle, zoomCycle);
+			glTranslatef(-transX, 0, 0);
 
-			unsigned char highlight = 0;
-			float secW = 0;
-			if(transX > -thisW && transX < thisW){
-				highlight = 2;
-				// secW = thisW / INTERVAL;
-				// if(transX < secW && transX > -secW)
-				// 	highlight = 2;
-				// if(transX < -secW)// && transX > -secW*1.5)
-				// 	highlight = 1;
-				// if(transX > secW)// && transX > -secW*0.5)
-				// 	highlight = 3;
+			int iterations = 7;
+
+			// subdivisions of space, zooming will repeat on the center one
+			//    eg. ternary cantor set would be 3
+			// for(int i = iterations-1; i >= 0; i--){
+
+			for(int i = TOP_I; i >= BOTTOM_I; i--){
+				glPushMatrix();
+				float scale = powf(INTERVAL, i);
+				float color = (i-linearCycle)/iterations;
+				glColor3f(color*0.75 + 0.25, color*0.75 + 0.25, color*0.75 + 0.25);
+				glScalef(1.0/scale, 1.0/scale, 1.0/scale);
+
+
+				glTranslatef(offsets[i], 0, 0);
+
+
+				// stuff here
+				// float thisW = powf(INTERVAL, 3.5-i);
+				float thisW = 1.0/powf(INTERVAL, i);
+
+				float transWOff = transX - offsets[i]/INTERVAL;
+
+				unsigned char highlight = 0;
+				float secW = 0;
+				if(transWOff > -thisW*0.5 && transWOff < thisW*0.5){
+					// highlight = 2;
+					secW = thisW / INTERVAL;
+					if(transWOff < secW*0.5 && transWOff > -secW*0.5){
+						offsets[i+1] = 0;
+						highlight = 2;
+					} else if(transWOff < -secW*0.5){
+						offsets[i+1] = -1.0;
+						highlight = 1;
+					} else if(transWOff > secW*0.5){
+						offsets[i+1] = 1.0;
+						highlight = 3;
+					}
+				}
+
+				sprintf(zoomReports[i], "(%d): SEC: %.4f  THISW: %.4f   SCALE:%.1f", i, secW, thisW, scale);
+
+				// for(int k = i; k >= 0; k--){
+				// 	glTranslatef(offsets[k], 0, 0);
+				// }
+
+
+				repeating2DScene(color*0.75 + 0.25, highlight);
+				glPopMatrix();
 			}
 
-			sprintf(zoomReports[i], "(%d): SEC: %.2f  THISW: %.2f   SCALE:%.2f", i, secW, thisW, scale);
-
-			
-			repeating2DScene(color*0.75 + 0.25, highlight);
-			glPopMatrix();
-		}
+		glPopMatrix();
 
 	glPopMatrix();
+
+	glColor3f(1.0, 1.0, 1.0);
+
+	text(shiftString, 550, 70, 0);
+	for(int i = TOP_I+1; i >= BOTTOM_I; i--){
+		char stream[10];
+		sprintf(stream, "%.4f", offsets[i]);
+		text(stream, 460, 68 + i*16, 0);
+	}
+	// memset(offsets, 0, sizeof(float)*20);
+
 
 }
 void keyDown(unsigned int key){ }
