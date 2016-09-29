@@ -122,6 +122,7 @@ static float _circle_vertices[192];
 float *_unit_sphere_vertices, *_unit_sphere_normals, *_unit_sphere_texture;
 
 void drawUnitCircle(float x, float y, float z);
+void drawUVSphereLines();
 
 #define ESCAPE_KEY 27
 #define SPACE_BAR 32
@@ -619,6 +620,44 @@ void draw3DAxesLines(float x, float y, float z, float scale){
 	glDrawArrays(GL_LINES, 0, 6);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glPopMatrix();
+}
+void drawUVSphereLines(){
+	float a1 = 0.33;
+	float a2 = 0.166;
+	glPushMatrix();
+		// equator
+		glColor4f(1.0, 1.0, 1.0, a1);
+			drawUnitCircle(0, 0, 0);
+		// latitude
+		glColor4f(1.0, 1.0, 1.0, a2);
+		for(float pos = 1.0/3; pos < 1.0; pos += 1.0/3){
+			glPushMatrix();
+				float r = cosf(pos*M_PI*0.5);
+				r = sqrt(1 - powf(pos,2));
+				glScalef(r, r, 1.0);
+					drawUnitCircle(0, 0, -pos);
+					drawUnitCircle(0, 0, pos);
+			glPopMatrix();
+		}
+		// longitude
+		glColor4f(1.0, 1.0, 1.0, a1);
+			glRotatef(90, 0, 1, 0);
+			drawUnitCircle(0, 0, 0);
+		glColor4f(1.0, 1.0, 1.0, a2);
+			glRotatef(30, 1, 0, 0);
+			drawUnitCircle(0, 0, 0);
+			glRotatef(30, 1, 0, 0);
+			drawUnitCircle(0, 0, 0);
+		glColor4f(1.0, 1.0, 1.0, a1);
+			glRotatef(30, 1, 0, 0);
+			drawUnitCircle(0, 0, 0);
+		glColor4f(1.0, 1.0, 1.0, a2);
+			glRotatef(30, 1, 0, 0);
+			drawUnitCircle(0, 0, 0);
+			glRotatef(30, 1, 0, 0);
+			drawUnitCircle(0, 0, 0);
+	glPopMatrix();
+	glColor4f(1.0, 1.0, 1.0, 1.0);
 }
 // GLint _sphere_stacks = 7; 
 // GLint _sphere_slices = 13;

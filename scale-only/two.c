@@ -2,7 +2,7 @@
 
 // zoom stuff
 #define INTERVAL 3
-unsigned int LVL_LOW = -1;
+unsigned int LVL_LOW = 0;
 unsigned int LVL_HIGH = 7;
 float zoomCycle = 1.0;
 float linearCycle;
@@ -80,24 +80,24 @@ void draw2D(){
 
 ///////////////////////////////////
 			// Method A
-			// for(int i = LVL_LOW; i < LVL_HIGH; i++){
-			// 	glPushMatrix();
-			// 		float scale = powf(INTERVAL, i);
-			// 		float color = (i-linearCycle) / (LVL_HIGH-LVL_LOW);
-			// 		glScalef(1.0/scale, 1.0/scale, 1.0/scale);
-			// 		repeating2DScene(color*0.75 + 0.25);
-			// 	glPopMatrix();
-			// }
+			for(int i = LVL_LOW; i < LVL_HIGH; i++){
+				glPushMatrix();
+					float scale = powf(INTERVAL, i);
+					float color = (i-linearCycle) / (LVL_HIGH-LVL_LOW);
+					glScalef(1.0/scale, 1.0/scale, 1.0/scale);
+					repeating2DScene(color*0.75 + 0.25);
+				glPopMatrix();
+			}
 ///////////////////////////////////
 			// Method B
-			glPushMatrix();
-			for(int i = LVL_LOW; i < LVL_HIGH; i++){
-				float scale = INTERVAL;
-				float color = (i-linearCycle) / (LVL_HIGH-LVL_LOW);
-				glScalef(1.0/scale, 1.0/scale, 1.0/scale);
-				repeating2DScene(color*0.75 + 0.25);
-			}
-			glPopMatrix();
+			// glPushMatrix();
+			// for(int i = LVL_LOW; i < LVL_HIGH; i++){
+			// 	float scale = INTERVAL;
+			// 	float color = (i-linearCycle) / (LVL_HIGH-LVL_LOW);
+			// 	glScalef(1.0/scale, 1.0/scale, 1.0/scale);
+			// 	repeating2DScene(color*0.75 + 0.25);
+			// }
+			// glPopMatrix();
 ///////////////////////////////////
 		glPopMatrix();  // SCALE: zoom cycle
 	glPopMatrix(); // TRANSLATE & SCALE: (0,0) to center, screen width to 1.0
