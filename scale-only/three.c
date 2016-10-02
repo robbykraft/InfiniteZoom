@@ -2,8 +2,8 @@
 
 // zoom stuff
 #define INTERVAL 3
-unsigned int LVL_LOW = 0;
-unsigned int LVL_HIGH = 15;
+int LVL_LOW = 0;
+int LVL_HIGH = 15;
 float zoomCycle = 1.0;
 float linearCycle;
 
