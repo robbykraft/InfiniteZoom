@@ -3,9 +3,10 @@
 // zoom stuff
 #define INTERVAL 3
 int LVL_LOW = 0;
-int LVL_HIGH = 7;
+int LVL_HIGH = 3;
 float zoomCycle = 1.0;
 float linearCycle;
+int zoomLevel;
 
 float offsets[20];
 
@@ -22,7 +23,7 @@ void drawHUD(){
 	glColor3f(1.0, 1.0, 1.0);
 	// text
 	char zoomReport[50], zoomReport2[50], oneMinusInterval[50], intervalAsFloat[50];
-	sprintf(zoomReport, "LINEAR (X): %.2f (%.2f)", linearCycle, originY*SPEED);
+	sprintf(zoomReport, "LINEAR (%d): %.2f (%.2f)", zoomLevel, linearCycle, originY*SPEED);
 	text(zoomReport, 4, 18, 0);
 	sprintf(zoomReport2, "%d ^ X: %.2f", INTERVAL, zoomCycle);
 	text(zoomReport2, 4, 37, 0);
@@ -40,6 +41,7 @@ void drawHUD(){
 	glColor3f(0.3, 0.3, 0.3);
 	drawRect(thirdW, 6, 0, thirdW, 15);
 	drawRect(thirdW, 25, 0, thirdW, 15);
+	glColor3f(1.0, 1.0, 1.0);
 }
 
 void repeating2DScene(float brightness, unsigned char highlight){ //0 for none, 1/2/3 for left/mid/right
@@ -77,6 +79,7 @@ void update(){
 	float increasing = originY * SPEED;
 	linearCycle = modf(increasing, &unused);
 	zoomCycle = powf(INTERVAL, linearCycle);
+	zoomLevel = increasing;
 
 	// originX = sinf(frameNum * 0.015)*3.5;
 	// originY = cosf(frameNum * 0.03)*2.4 + 2.4 + .05;
@@ -91,6 +94,10 @@ void draw2D(){
 	// }
 
 	drawHUD();
+
+	for(int i = 0; i < 9; i++){
+		text(zoomReports[i], 300, 100+18*i, 0);
+	}
 
 	glPushMatrix();  // TRANSLATE & SCALE: (0,0) to center, screen width to 1.0
 		glTranslatef(WIDTH*0.5, HEIGHT*0.75, 0.0f);
@@ -107,24 +114,35 @@ void draw2D(){
 			for(int i = LVL_HIGH-1; i >= LVL_LOW; i--){
 				glPushMatrix();
 				// with each zoom level we also calculate the fmodf of the translation
-					float thisW = 1.0/powf(INTERVAL, i);
-					float thisTrans = modf(-(transX)/thisW, &unused);
-					float anotherTrans = modf(-(transX)/thisW - 0.5, &unused);
-					int wholeTrans = -transX / thisW - 0.5 ;
 
-					sprintf(zoomReports[i], "%f : %f : (%f) : %d", thisW, thisTrans, anotherTrans, wholeTrans);
+					float lvlWidth = 1.0/powf(INTERVAL, i);
+					int lvlTransWhole = -transX / lvlWidth;
+					float lvlTransPart = modf(-(transX)/lvlWidth, &unused);
+					// 
+					int lvlTransWhole_OFF = -transX / lvlWidth - 0.5;
+					float lvlTransPart_OFF = modf(-(transX)/lvlWidth - 0.5, &unused);
 
-					glTranslatef(-transX - wholeTrans * thisW, 0, 0);
+					// float aTransX = transX;
+					// float aThisW = 1.0/powf(INTERVAL, i + zoomLevel);
+					// int aWholeTrans = -aTransX / aThisW - 0.5 ;
+
+					glTranslatef(-transX - lvlTransWhole_OFF * lvlWidth, 0, 0);
+					// glTranslatef(-aTransX - aWholeTrans * aThisW, 0, 0);
 					float scale = powf(INTERVAL, i);
 					float color = (i-linearCycle) / (LVL_HIGH-LVL_LOW);
 					glColor3f(color*0.75 + 0.25, color*0.75 + 0.25, color*0.75 + 0.25);
 					glScalef(1.0/scale, 1.0/scale, 1.0/scale);
 
+
+					sprintf(zoomReports[i], "%f : (%d) %f : [(%d) %f]", lvlWidth, lvlTransWhole, lvlTransPart, lvlTransWhole_OFF, lvlTransPart_OFF);
+					// sprintf(zoomReports[i], "%f : (%d) %f", lvlWidth, lvlTransWhole, lvlTransPart);
+
+
 					unsigned char highlight = 0;
-					float secW = 0;
-				// if(transWOff > -thisW*0.5 && transWOff < thisW*0.5){
+					// float secW = 0;
+				// if(transWOff > -lvlWidth*0.5 && transWOff < lvlWidth*0.5){
 				// 	// highlight = 2;
-				// 	secW = thisW / INTERVAL;
+				// 	secW = lvlWidth / INTERVAL;
 				// 	if(transWOff < secW*0.5 && transWOff > -secW*0.5){
 				// 		offsets[i+1] = 0;
 				// 		highlight = 2;
@@ -150,10 +168,6 @@ void draw2D(){
 	char transChar[50];
 	sprintf(transChar, "%f", transX);
 	text(transChar, 400, 60, 0);
-
-	// for(int i = 0; i < 9; i++){
-	// 	text(zoomReports[i], 300, 100+18*i, 0);
-	// }
 
 	// text(shiftString, 550, 70, 0);
 	// for(int i = LVL_HIGH-1; i >= LVL_LOW; i--){
