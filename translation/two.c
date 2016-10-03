@@ -3,7 +3,7 @@
 // zoom stuff
 #define INTERVAL 3
 int LVL_LOW = 0;
-int LVL_HIGH = 3;
+int LVL_HIGH = 7;
 float zoomCycle = 1.0;
 float linearCycle;
 int zoomLevel;
@@ -15,8 +15,7 @@ float transX;
 float SPEED = 0.2;
 GLuint texture;
 
-char zoomReports[9][50];
-char shiftString[50];
+char zoomReports[9][70];
 
 void drawHUD(){
 	float thirdW = WIDTH * 0.33;
@@ -42,6 +41,12 @@ void drawHUD(){
 	drawRect(thirdW, 6, 0, thirdW, 15);
 	drawRect(thirdW, 25, 0, thirdW, 15);
 	glColor3f(1.0, 1.0, 1.0);
+	for(int i = LVL_HIGH-1; i >= LVL_LOW; i--){
+		text(zoomReports[i], 200, 100+18*i, 0);
+	}
+	char transChar[50];
+	sprintf(transChar, "%f", transX);
+	text(transChar, 400, 60, 0);
 }
 
 void repeating2DScene(float brightness, unsigned char highlight){ //0 for none, 1/2/3 for left/mid/right
@@ -84,20 +89,12 @@ void update(){
 	// originX = sinf(frameNum * 0.015)*3.5;
 	// originY = cosf(frameNum * 0.03)*2.4 + 2.4 + .05;
 
-	transX = originX*.07;
+	transX = originX*.07 * powf(INTERVAL, zoomLevel);
 }
 
 void draw2D(){
-	// glColor3f(1.0, 1.0, 1.0);
-	// for(int i = LVL_HIGH-1; i >= LVL_LOW; i--){
-	// 	text(zoomReports[i], 10, 68 + i*16, 0);
-	// }
 
 	drawHUD();
-
-	for(int i = 0; i < 9; i++){
-		text(zoomReports[i], 300, 100+18*i, 0);
-	}
 
 	glPushMatrix();  // TRANSLATE & SCALE: (0,0) to center, screen width to 1.0
 		glTranslatef(WIDTH*0.5, HEIGHT*0.75, 0.0f);
@@ -105,8 +102,6 @@ void draw2D(){
 		// NOW: dimensions are 1.0 = width of screen
 
 		drawGround();
-
-		// sprintf(shiftString, "");
 
 		glPushMatrix();  // SCALE: zoom cycle
 			glScalef(zoomCycle, zoomCycle, zoomCycle);
@@ -135,7 +130,6 @@ void draw2D(){
 
 
 					sprintf(zoomReports[i], "%f : (%d) %f : [(%d) %f]", lvlWidth, lvlTransWhole, lvlTransPart, lvlTransWhole_OFF, lvlTransPart_OFF);
-					// sprintf(zoomReports[i], "%f : (%d) %f", lvlWidth, lvlTransWhole, lvlTransPart);
 
 
 					unsigned char highlight = 0;
@@ -158,24 +152,8 @@ void draw2D(){
 					repeating2DScene(color*0.75 + 0.25, highlight);
 				glPopMatrix();
 			}
-
 		glPopMatrix();  // SCALE: zoom cycle
-
 	glPopMatrix();  // TRANSLATE & SCALE: (0,0) to center, screen width to 1.0
-
-	glColor3f(1.0, 1.0, 1.0);
-
-	char transChar[50];
-	sprintf(transChar, "%f", transX);
-	text(transChar, 400, 60, 0);
-
-	// text(shiftString, 550, 70, 0);
-	// for(int i = LVL_HIGH-1; i >= LVL_LOW; i--){
-	// 	char stream[10];
-	// 	sprintf(stream, "%.4f", offsets[i]);
-	// 	text(stream, 460, 68 + i*16, 0);
-	// }
-	// memset(offsets, 0, sizeof(float)*20);
 }
 
 void draw3D(){ }
