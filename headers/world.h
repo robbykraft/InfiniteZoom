@@ -94,6 +94,7 @@ void orthoPerspective(float x, float y, float width, float height);
 void display();
 void updateWorld();  // process input devices
 // INPUT DEVICES
+void moveOriginWithArrowKeys();
 void mouseButtons(int button, int state, int x, int y);  // when mouse button state changes
 void mouseMotion(int x, int y);   // when mouse is dragging screen
 void mousePassiveMotion(int x, int y);  // when mouse is moving but not pressed
@@ -301,9 +302,28 @@ void display(){
 	glutSwapBuffers();
 	// glFlush();
 }
-// process input devices if in first person perspective mode
 void updateWorld(){
 	frameNum += 1;
+	// keyboard input
+	// moveOriginWithArrowKeys();
+	if(keyboard[MINUS_KEY]){
+		ZOOM += ZOOM_SPEED;
+		rebuildProjection();
+	}
+	if(keyboard[PLUS_KEY]){
+		ZOOM -= ZOOM_SPEED;
+		if(ZOOM < 0)
+			ZOOM = 0;
+		rebuildProjection();
+	}
+	update();
+	glutPostRedisplay();
+}
+///////////////////////////////////////
+//////////       INPUT       //////////
+///////////////////////////////////////
+void moveOriginWithArrowKeys(){
+	// process input devices if in first person perspective mode
 	// map movement direction to the direction the person is facing
 	float lookAzimuth = lookOrientation[0]/180.0*M_PI;
 	originDX = originDY = originDZ = 0;
@@ -327,25 +347,10 @@ void updateWorld(){
 		originDZ -= WALK_INTERVAL;
 	if(keyboard['Z'] || keyboard['z'])
 		originDZ += WALK_INTERVAL;
-	if(keyboard[MINUS_KEY]){
-		ZOOM += ZOOM_SPEED;
-		rebuildProjection();
-	}
-	if(keyboard[PLUS_KEY]){
-		ZOOM -= ZOOM_SPEED;
-		if(ZOOM < 0)
-			ZOOM = 0;
-		rebuildProjection();
-	}
 	originX -= originDX;
 	originY -= originDY;
-	originZ -= originDZ;
-	update();
-	glutPostRedisplay();
+	originZ -= originDZ;	
 }
-///////////////////////////////////////
-//////////       INPUT       //////////
-///////////////////////////////////////
 static int mouseDragStartX, mouseDragStartY;
 void mouseUpdatePerspective(int dx, int dy){
 	switch(PERSPECTIVE){

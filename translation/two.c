@@ -79,6 +79,22 @@ void setup(){
 
 static double unused;
 void update(){ 
+// process keyboard
+	float TRANSLATE_INTERVAL = 1.0/powf(INTERVAL, originY * SPEED) * 0.03;
+	originDX = originDY = originDZ = 0;
+	if(keyboard[UP_KEY]){
+		originDY += WALK_INTERVAL;
+	} if(keyboard[DOWN_KEY]){
+		originDY -= WALK_INTERVAL;
+	} if(keyboard[LEFT_KEY]){
+		originDX += TRANSLATE_INTERVAL;
+	} if(keyboard[RIGHT_KEY]){
+		originDX -= TRANSLATE_INTERVAL;
+	}
+	originX -= originDX;
+	originY -= originDY;
+	originZ -= originDZ;
+
 	float increasing = originY * SPEED;
 	linearCycle = modf(increasing, &unused);
 	zoomCycle = powf(INTERVAL, linearCycle);
@@ -119,7 +135,6 @@ void draw2D(){
 					float color = (i-linearCycle) / (LVL_HIGH-LVL_LOW);
 					glColor3f(color*0.75 + 0.25, color*0.75 + 0.25, color*0.75 + 0.25);
 					glScalef(1.0/scale, 1.0/scale, 1.0/scale);
-
 
 					sprintf(zoomReports[i], "%f : (%d) %f : [(%d) %f]", lvlWidth, lvlTransWhole, lvlTransPart, lvlTransWhole_OFF, lvlTransPart_OFF);
 
