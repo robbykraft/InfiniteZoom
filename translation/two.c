@@ -8,8 +8,6 @@ float zoomCycle = 1.0;
 float linearCycle;
 int zoomLevel;
 
-float offsets[20];
-
 // world stuff
 float transX;
 float SPEED = 0.2;
@@ -86,9 +84,6 @@ void update(){
 	zoomCycle = powf(INTERVAL, linearCycle);
 	zoomLevel = increasing;
 
-	// originX = sinf(frameNum * 0.015)*3.5;
-	// originY = cosf(frameNum * 0.03)*2.4 + 2.4 + .05;
-
 	transX = originX*.07 * powf(INTERVAL, zoomLevel);
 }
 
@@ -102,6 +97,7 @@ void draw2D(){
 		// NOW: dimensions are 1.0 = width of screen
 
 		drawGround();
+		// glScalef(INTERVAL*INTERVAL, INTERVAL*INTERVAL, INTERVAL*INTERVAL);
 
 		glPushMatrix();  // SCALE: zoom cycle
 			glScalef(zoomCycle, zoomCycle, zoomCycle);
@@ -113,13 +109,9 @@ void draw2D(){
 					float lvlWidth = 1.0/powf(INTERVAL, i);
 					int lvlTransWhole = -transX / lvlWidth;
 					float lvlTransPart = modf(-(transX)/lvlWidth, &unused);
-					// 
+
 					int lvlTransWhole_OFF = -transX / lvlWidth - 0.5;
 					float lvlTransPart_OFF = modf(-(transX)/lvlWidth - 0.5, &unused);
-
-					// float aTransX = transX;
-					// float aThisW = 1.0/powf(INTERVAL, i + zoomLevel);
-					// int aWholeTrans = -aTransX / aThisW - 0.5 ;
 
 					glTranslatef(-transX - lvlTransWhole_OFF * lvlWidth, 0, 0);
 					// glTranslatef(-aTransX - aWholeTrans * aThisW, 0, 0);
@@ -131,23 +123,14 @@ void draw2D(){
 
 					sprintf(zoomReports[i], "%f : (%d) %f : [(%d) %f]", lvlWidth, lvlTransWhole, lvlTransPart, lvlTransWhole_OFF, lvlTransPart_OFF);
 
-
 					unsigned char highlight = 0;
-					// float secW = 0;
-				// if(transWOff > -lvlWidth*0.5 && transWOff < lvlWidth*0.5){
-				// 	// highlight = 2;
-				// 	secW = lvlWidth / INTERVAL;
-				// 	if(transWOff < secW*0.5 && transWOff > -secW*0.5){
-				// 		offsets[i+1] = 0;
-				// 		highlight = 2;
-				// 	} else if(transWOff < -secW*0.5){
-				// 		offsets[i+1] = -1.0;
-				// 		highlight = 1;
-				// 	} else if(transWOff > secW*0.5){
-				// 		offsets[i+1] = 1.0;
-				// 		highlight = 3;
-				// 	}
-				// }
+					if(fabs(lvlTransPart_OFF) < 1.0/INTERVAL){
+						highlight = 1;
+					} else if(fabs(lvlTransPart_OFF) < 2.0/INTERVAL){
+						highlight = 2;
+					} else if(fabs(lvlTransPart_OFF) < 1.0){
+						highlight = 3;
+					}
 
 					repeating2DScene(color*0.75 + 0.25, highlight);
 				glPopMatrix();
