@@ -6,27 +6,26 @@ int LVL_LOW = 0;
 int LVL_HIGH = 9;
 float zoomCycle = 1.0;
 float linearCycle;
-int zoomLevel;
-
+float zoom = 0;
+int zoomWhole;
+float ZOOM_SPEED = 0.02;
 float TRANSLATE_SPEED = 0.01;
-float ZOOM_SPEED = 0.08;
-
+float transX;
 int HALF_INTERVAL; // lower bounds of INTERVAL / 2
 unsigned char INTERVAL_IS_ODD;
-// world stuff
-float transX;
-float SPEED = 0.2;
-GLuint texture;
 
 char zoomReports[9][70];
+GLuint texture;
 static double unused;
 
 void drawHUD(){
 	float thirdW = WIDTH * 0.33;
 	glColor3f(1.0, 1.0, 1.0);
 	// text
-	char zoomReport[50], zoomReport2[50], oneMinusInterval[50], intervalAsFloat[50];
-	sprintf(zoomReport, "LINEAR (%d): %.2f (%.2f)", zoomLevel, linearCycle, originY*SPEED);
+	char zoomString[50], zoomReport[50], zoomReport2[50], oneMinusInterval[50], intervalAsFloat[50];
+	sprintf(zoomString, "ZOOM: %.2f", zoom);
+	text(zoomString, thirdW*2.5-15, 27, 0);
+	sprintf(zoomReport, "LINEAR (%d): %.2f", zoomWhole, linearCycle);
 	text(zoomReport, 4, 18, 0);
 	sprintf(zoomReport2, "%d ^ X: %.2f", INTERVAL, zoomCycle);
 	text(zoomReport2, 4, 37, 0);
@@ -38,12 +37,7 @@ void drawHUD(){
 	text("1.0", thirdW*2 + 5, 18, 0);
 	sprintf(intervalAsFloat, "%d.0", INTERVAL);
 	text(intervalAsFloat, thirdW*2 + 5, 37, 0);
-	// bars
-	drawRect(thirdW, 6, 0, thirdW*linearCycle, 15);
-	drawRect(thirdW, 25, 0, thirdW*(zoomCycle-1) / (INTERVAL-1), 15);
-	glColor3f(0.3, 0.3, 0.3);
-	drawRect(thirdW, 6, 0, thirdW, 15);
-	drawRect(thirdW, 25, 0, thirdW, 15);
+	// translation data
 	glColor3f(1.0, 1.0, 1.0);
 	for(int i = LVL_HIGH-1; i >= LVL_LOW; i--){
 		text(zoomReports[i], 200, 100+18*i, 0);
@@ -51,6 +45,13 @@ void drawHUD(){
 	char transChar[50];
 	sprintf(transChar, "%f", transX);
 	text(transChar, 400, 60, 0);
+	// bars
+	glColor3f(0.66, 0.66, 0.66);
+	drawRect(thirdW, 6, 0, thirdW*linearCycle, 15);
+	drawRect(thirdW, 25, 0, thirdW*(zoomCycle-1) / (INTERVAL-1), 15);
+	glColor3f(0.33, 0.33, 0.33);
+	drawRect(thirdW, 6, 0, thirdW, 15);
+	drawRect(thirdW, 25, 0, thirdW, 15);
 }
 
 void repeating2DScene(float brightness, unsigned char highlight){ //0 for none, 1/2/3.. to color segments
@@ -81,27 +82,26 @@ void setup(){
 
 void update(){ 
 // process keyboard
-	float TRANSLATE_INTERVAL = 1.0/powf(INTERVAL, originY * SPEED) * TRANSLATE_SPEED;
-	originDX = originDY = originDZ = 0;
-	if(keyboard[UP_KEY]){
-		originDY += ZOOM_SPEED;
-	} if(keyboard[DOWN_KEY]){
-		originDY -= ZOOM_SPEED;
-	} if(keyboard[LEFT_KEY]){
-		originDX += TRANSLATE_INTERVAL;
-	} if(keyboard[RIGHT_KEY]){
-		originDX -= TRANSLATE_INTERVAL;
+	if(keyboard[UP_KEY] || keyboard['W'] || keyboard['w']){
+		zoom -= ZOOM_SPEED;
 	}
-	originX -= originDX;
-	originY -= originDY;
-	originZ -= originDZ;
+	if(keyboard[DOWN_KEY] || keyboard['S'] || keyboard['s']){
+		zoom += ZOOM_SPEED;
+	}
 
-	float increasing = originY * SPEED;
-	linearCycle = modf(increasing, &unused);
+	float TRANSLATE_INTERVAL = 1.0/powf(INTERVAL, zoom) * TRANSLATE_SPEED;
+	if(keyboard[LEFT_KEY]){
+		originX -= TRANSLATE_INTERVAL;
+	}
+	if(keyboard[RIGHT_KEY]){
+		originX += TRANSLATE_INTERVAL;
+	}
+
+	zoomWhole = zoom;
+	linearCycle = modf(zoom, &unused);
 	zoomCycle = powf(INTERVAL, linearCycle);
-	zoomLevel = increasing;
 
-	transX = originX*.07 * powf(INTERVAL, zoomLevel);
+	transX = originX*.07 * powf(INTERVAL, zoomWhole);
 }
 
 void draw2D(){

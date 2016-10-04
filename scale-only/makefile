@@ -23,13 +23,13 @@ endif
 all: two three
 
 $(EXE2): two.c
-	gcc -o $@ $< $(CFLAGS) $(LDFLAGS)
+	gcc -o ../bin/$@ $< $(CFLAGS) $(LDFLAGS)
 
 $(EXE3): three.c
-	gcc -o $@ $< $(CFLAGS) $(LDFLAGS)
+	gcc -o ../bin/$@ $< $(CFLAGS) $(LDFLAGS)
 
 run2:
-	./$(EXE2) $(ARGS)
+	../bin/$(EXE2) $(ARGS)
 
 run3:
-	./$(EXE3) $(ARGS)
+	../bin/$(EXE3) $(ARGS)

@@ -6,27 +6,21 @@ int LVL_LOW = 0;
 int LVL_HIGH = 7;
 float zoomCycle = 1.0;
 float linearCycle;
+float zoom = 0;
+int zoomWhole;
+float ZOOM_SPEED = 0.01;
 
-// world stuff
-float SPEED = 0.2;
 GLuint texture;
-
-void repeating2DScene(float brightness){
-	float barW = 1.0/INTERVAL;//(1.0-INTERVAL)*0.33;
-	float barH = 0.25;
-
-	glColor3f(brightness, brightness, brightness);
-	drawRect(-barW*1.5, -barH, 0, barW, barH);  // left
-	// drawRect(-barW*0.5, -barH, 0, barW, barH);     // middle
-	drawRect(+barW*0.5, -barH, 0, barW, barH);       // right
-}
+static double unused;
 
 void drawHUD(){
 	float thirdW = WIDTH * 0.33;
 	glColor3f(1.0, 1.0, 1.0);
 	// text
-	char zoomReport[50], zoomReport2[50], oneMinusInterval[50], intervalAsFloat[50];
-	sprintf(zoomReport, "LINEAR (X): %.2f (%.2f)", linearCycle, originY*SPEED);
+	char zoomString[50], zoomReport[50], zoomReport2[50], oneMinusInterval[50], intervalAsFloat[50];
+	sprintf(zoomString, "ZOOM: %.2f", zoom);
+	text(zoomString, thirdW*2.5-15, 27, 0);
+	sprintf(zoomReport, "LINEAR (%d): %.2f", zoomWhole, linearCycle);
 	text(zoomReport, 4, 18, 0);
 	sprintf(zoomReport2, "%d ^ X: %.2f", INTERVAL, zoomCycle);
 	text(zoomReport2, 4, 37, 0);
@@ -39,9 +33,10 @@ void drawHUD(){
 	sprintf(intervalAsFloat, "%d.0", INTERVAL);
 	text(intervalAsFloat, thirdW*2 + 5, 37, 0);
 	// bars
+	glColor3f(0.66, 0.66, 0.66);
 	drawRect(thirdW, 6, 0, thirdW*linearCycle, 15);
 	drawRect(thirdW, 25, 0, thirdW*(zoomCycle-1) / (INTERVAL-1), 15);
-	glColor3f(0.3, 0.3, 0.3);
+	glColor3f(0.33, 0.33, 0.33);
 	drawRect(thirdW, 6, 0, thirdW, 15);
 	drawRect(thirdW, 25, 0, thirdW, 15);
 }
@@ -53,14 +48,32 @@ void drawGround(){
 	glBindTexture (GL_TEXTURE_2D, 0);
 }
 
+void repeating2DScene(float brightness){
+	int HALF_INTERVAL = (float)INTERVAL*0.5;
+	float barH = 0.25;
+	float barW = 1.0/INTERVAL * HALF_INTERVAL;
+
+	glColor3f(brightness, brightness, brightness);
+	drawRect(-0.5, -barH, 0, barW, barH);
+	glColor3f(brightness + 0.02, brightness + 0.02, brightness + 0.02);
+	drawRect(0.5-barW, -barH, 0, barW, barH);
+}
+
 void setup(){ 
 	texture = loadTexture("../resources/stripes512-256.raw", 512, 256);
 }
 
 void update(){ 
-	static double unused;
-	float increasing = originY * SPEED;
-	linearCycle = modf(increasing, &unused);
+	// keyboard input
+	if(keyboard[UP_KEY] || keyboard['W'] || keyboard['w']){
+		zoom -= ZOOM_SPEED;
+	} if(keyboard[DOWN_KEY] || keyboard['S'] || keyboard['s']){
+		zoom += ZOOM_SPEED;
+	}
+
+	// zoom math
+	zoomWhole = zoom;
+	linearCycle = modf(zoom, &unused);
 	zoomCycle = powf(INTERVAL, linearCycle);
 }
 
@@ -80,7 +93,7 @@ void draw2D(){
 
 ///////////////////////////////////
 			// Method A
-			for(int i = LVL_LOW; i < LVL_HIGH; i++){
+			for(int i = LVL_HIGH-1; i >= LVL_LOW; i--){
 				glPushMatrix();
 					float scale = powf(INTERVAL, i);
 					float color = (i-linearCycle) / (LVL_HIGH-LVL_LOW);
@@ -91,7 +104,7 @@ void draw2D(){
 ///////////////////////////////////
 			// Method B
 			// glPushMatrix();
-			// for(int i = LVL_LOW; i < LVL_HIGH; i++){
+			// for(int i = LVL_HIGH-1; i >= LVL_LOW; i--){
 			// 	float scale = INTERVAL;
 			// 	float color = (i-linearCycle) / (LVL_HIGH-LVL_LOW);
 			// 	glScalef(1.0/scale, 1.0/scale, 1.0/scale);

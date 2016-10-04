@@ -67,6 +67,7 @@ static float originDY = 0.0f;
 static float originDZ = 0.0f;
 static float ZOOM = 15.0f;  // POLAR PERSPECTIVE    // zoom scale, converted to logarithmic
 static float ZOOM_RADIX = 3;
+static float POLAR_ZOOM_SPEED = 0.4;
 static unsigned char GROUND = 1;  // a 2D grid
 static unsigned char GRID = 1;    // a 3D grid
 // PERSPECTIVE
@@ -305,16 +306,16 @@ void updateWorld(){
 	frameNum += 1;
 	// keyboard input
 	// moveOriginWithArrowKeys();
-	// if(keyboard[MINUS_KEY]){
-	// 	ZOOM += ZOOM_SPEED;
-	// 	rebuildProjection();
-	// }
-	// if(keyboard[PLUS_KEY]){
-	// 	ZOOM -= ZOOM_SPEED;
-	// 	if(ZOOM < 0)
-	// 		ZOOM = 0;
-	// 	rebuildProjection();
-	// }
+	if(keyboard[MINUS_KEY]){
+		ZOOM += POLAR_ZOOM_SPEED;
+		rebuildProjection();
+	}
+	if(keyboard[PLUS_KEY]){
+		ZOOM -= POLAR_ZOOM_SPEED;
+		if(ZOOM < 0)
+			ZOOM = 0;
+		rebuildProjection();
+	}
 	update();
 	glutPostRedisplay();
 }
