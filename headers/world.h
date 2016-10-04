@@ -45,7 +45,6 @@ void mouseMoved(int x, int y);
 #define CONTINUOUS_REFRESH 1  // (0) = maximum efficiency, screen can redraw only upon receiving input
 static float MOUSE_SENSITIVITY = 0.333f;
 static float WALK_INTERVAL = 0.04f;  // WALKING SPEED. @ 60 updates/second, walk speed = 6 units/second
-static float ZOOM_SPEED = 0.4f;
 // WINDOW size upon boot
 static int WIDTH = 800;  // (readonly) set these values here
 static int HEIGHT = 600; // (readonly) setting during runtime will not re-size window
@@ -306,16 +305,16 @@ void updateWorld(){
 	frameNum += 1;
 	// keyboard input
 	// moveOriginWithArrowKeys();
-	if(keyboard[MINUS_KEY]){
-		ZOOM += ZOOM_SPEED;
-		rebuildProjection();
-	}
-	if(keyboard[PLUS_KEY]){
-		ZOOM -= ZOOM_SPEED;
-		if(ZOOM < 0)
-			ZOOM = 0;
-		rebuildProjection();
-	}
+	// if(keyboard[MINUS_KEY]){
+	// 	ZOOM += ZOOM_SPEED;
+	// 	rebuildProjection();
+	// }
+	// if(keyboard[PLUS_KEY]){
+	// 	ZOOM -= ZOOM_SPEED;
+	// 	if(ZOOM < 0)
+	// 		ZOOM = 0;
+	// 	rebuildProjection();
+	// }
 	update();
 	glutPostRedisplay();
 }

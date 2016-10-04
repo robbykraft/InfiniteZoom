@@ -1,16 +1,18 @@
 #include "../headers/world.h"
 
 // zoom stuff
-#define INTERVAL 5
+#define INTERVAL 2
 int LVL_LOW = 0;
-int LVL_HIGH = 7;
+int LVL_HIGH = 9;
 float zoomCycle = 1.0;
 float linearCycle;
 int zoomLevel;
 
-float TRANSLATE_SCALE = 0.005;
-float ZOOM_INTERVAL = 0.04;
+float TRANSLATE_SPEED = 0.01;
+float ZOOM_SPEED = 0.08;
 
+int HALF_INTERVAL; // lower bounds of INTERVAL / 2
+unsigned char INTERVAL_IS_ODD;
 // world stuff
 float transX;
 float SPEED = 0.2;
@@ -54,13 +56,10 @@ void drawHUD(){
 void repeating2DScene(float brightness, unsigned char highlight){ //0 for none, 1/2/3.. to color segments
 	float barW = 1.0/INTERVAL;
 	float barH = 0.25;
-	int HALF_INTERVAL = (float)INTERVAL*0.5;
-	float REMAINDER = INTERVAL - HALF_INTERVAL*2;
-	// printf("%f\n", REMAINDER);
 	for(int i = 1; i <= INTERVAL; i++){
 		if(highlight == i)  glColor3f(brightness, 0, 0);
 		else                glColor3f(brightness+(i%2)*.03, brightness+(i%2)*.03, brightness+(i%2)*.03);
-		drawRect(-barW*(1.0+0.5*REMAINDER) -barW*HALF_INTERVAL + barW*i, -barH, 0, barW, barH);		
+		drawRect(-barW*(1.0 + HALF_INTERVAL + 0.5*INTERVAL_IS_ODD) + barW*i, -barH, 0, barW, barH);
 	}
 }
 
@@ -75,16 +74,19 @@ void drawGround(){
 
 void setup(){ 
 	texture = loadTexture("../resources/stripes512-256.raw", 512, 256);
+	HALF_INTERVAL = (float)INTERVAL*0.5;
+	INTERVAL_IS_ODD = INTERVAL - HALF_INTERVAL*2;
+	printf("interval: %d\nhalf: %d  ODD?: %d\n", INTERVAL, HALF_INTERVAL, INTERVAL_IS_ODD);
 }
 
 void update(){ 
 // process keyboard
-	float TRANSLATE_INTERVAL = 1.0/powf(INTERVAL, originY * SPEED) * TRANSLATE_SCALE;
+	float TRANSLATE_INTERVAL = 1.0/powf(INTERVAL, originY * SPEED) * TRANSLATE_SPEED;
 	originDX = originDY = originDZ = 0;
 	if(keyboard[UP_KEY]){
-		originDY += ZOOM_INTERVAL;
+		originDY += ZOOM_SPEED;
 	} if(keyboard[DOWN_KEY]){
-		originDY -= ZOOM_INTERVAL;
+		originDY -= ZOOM_SPEED;
 	} if(keyboard[LEFT_KEY]){
 		originDX += TRANSLATE_INTERVAL;
 	} if(keyboard[RIGHT_KEY]){
@@ -125,14 +127,14 @@ void draw2D(){
 					int lvlTransWhole = -transX / lvlWidth;
 					float lvlTransPart = modf(-(transX)/lvlWidth, &unused);
 
-					int lvlTransWhole_OFF = -transX / lvlWidth - 0.5;
-					float lvlTransPart_OFF = modf(-(transX)/lvlWidth - 0.5, &unused);
-					// int lvlTransWhole_OFF = lvlTransWhole;
-					// float lvlTransPart_OFF = lvlTransPart;
+					// int lvlTransWhole_OFF = -transX / lvlWidth - 0.5;
+					// float lvlTransPart_OFF = modf(-(transX)/lvlWidth - 0.5, &unused);
+					// glTranslatef(-transX - lvlTransWhole_OFF * lvlWidth, 0, 0);
 
-					glTranslatef(-transX - lvlTransWhole_OFF * lvlWidth, 0, 0);
-					// glTranslatef(-transX - (lvlTransWhole_OFF - 0.5) * lvlWidth, 0, 0);
-					// glTranslatef(-aTransX - aWholeTrans * aThisW, 0, 0);
+					int lvlTransWhole_OFF = -transX / lvlWidth - 0.5*(INTERVAL_IS_ODD);
+					float lvlTransPart_OFF = modf(-(transX)/lvlWidth - 0.5*(INTERVAL_IS_ODD), &unused);
+					glTranslatef(-transX - (lvlTransWhole_OFF - 0.5*(!INTERVAL_IS_ODD)) * lvlWidth, 0, 0);
+
 					float scale = powf(INTERVAL, i);
 					float color = (i-linearCycle) / (LVL_HIGH-LVL_LOW);
 					glScalef(1.0/scale, 1.0/scale, 1.0/scale);
