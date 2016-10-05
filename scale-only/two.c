@@ -1,16 +1,18 @@
 #include "../headers/world.h"
 
-// zoom stuff
+// space
 #define INTERVAL 3
-int LVL_LOW = 0;
-int LVL_HIGH = 7;
-float zoomCycle = 1.0;
-float linearCycle;
+long LVL_LOW = 0;
+long LVL_HIGH = 7;
+// zoom
+long zoomWhole;
 float zoom = 0;
-int zoomWhole;
+float zoomCycleScale;
+// keyboard input
 float ZOOM_SPEED = 0.01;
-
+// graphics
 GLuint texture;
+unsigned char showHUD = 1;
 static double unused;
 
 void drawHUD(){
@@ -20,9 +22,9 @@ void drawHUD(){
 	char zoomString[50], zoomReport[50], zoomReport2[50], oneMinusInterval[50], intervalAsFloat[50];
 	sprintf(zoomString, "ZOOM: %.2f", zoom);
 	text(zoomString, thirdW*2.5-15, 27, 0);
-	sprintf(zoomReport, "LINEAR (%d): %.2f", zoomWhole, linearCycle);
+	sprintf(zoomReport, "LINEAR (%ld): %.2f", zoomWhole, zoom);
 	text(zoomReport, 4, 18, 0);
-	sprintf(zoomReport2, "%d ^ X: %.2f", INTERVAL, zoomCycle);
+	sprintf(zoomReport2, "%d ^ X: %.2f", INTERVAL, zoomCycleScale);
 	text(zoomReport2, 4, 37, 0);
 	text("1.0", thirdW*1.5 - 5, 18, 0);
 	sprintf(oneMinusInterval, "%.1f", (float)INTERVAL-1.0);
@@ -34,8 +36,8 @@ void drawHUD(){
 	text(intervalAsFloat, thirdW*2 + 5, 37, 0);
 	// bars
 	glColor3f(0.66, 0.66, 0.66);
-	drawRect(thirdW, 6, 0, thirdW*linearCycle, 15);
-	drawRect(thirdW, 25, 0, thirdW*(zoomCycle-1) / (INTERVAL-1), 15);
+	drawRect(thirdW, 6, 0, thirdW*zoom, 15);
+	drawRect(thirdW, 25, 0, thirdW*(zoomCycleScale-1) / (INTERVAL-1), 15);
 	glColor3f(0.33, 0.33, 0.33);
 	drawRect(thirdW, 6, 0, thirdW, 15);
 	drawRect(thirdW, 25, 0, thirdW, 15);
@@ -71,7 +73,8 @@ void update(){
 		zoom += ZOOM_SPEED;
 	}
 
-	// zoom math
+	// zoomWhole = zoom;
+	// zoom = modf(zoom, &unused);
 	while(zoom >= 1.0){
 		zoomWhole += 1;
 		zoom -= 1.0;
@@ -80,14 +83,13 @@ void update(){
 		zoomWhole -= 1;
 		zoom += 1.0;
 	}
-	// zoomWhole = zoom;
-	linearCycle = modf(zoom, &unused);
-	zoomCycle = powf(INTERVAL, linearCycle);
+	zoomCycleScale = powf(INTERVAL, zoom);
 }
 
 void draw2D(){
 
-	drawHUD();
+	if(showHUD)
+		drawHUD();
 
 	glPushMatrix(); // TRANSLATE & SCALE: (0,0) to center, screen width to 1.0
 		glTranslatef(WIDTH*0.5, HEIGHT*0.75, 0.0f);
@@ -97,14 +99,14 @@ void draw2D(){
 		drawGround();
 
 		glPushMatrix();  // SCALE: zoom cycle
-			glScalef(zoomCycle, zoomCycle, zoomCycle);
+			glScalef(zoomCycleScale, zoomCycleScale, zoomCycleScale);
 
 ///////////////////////////////////
 			// Method A
-			for(int i = LVL_HIGH-1; i >= LVL_LOW; i--){
+			for(long i = LVL_HIGH-1; i >= LVL_LOW; i--){
 				glPushMatrix();
 					float scale = powf(INTERVAL, i);
-					float color = (i-linearCycle) / (LVL_HIGH-LVL_LOW);
+					float color = (i-zoom) / (LVL_HIGH-LVL_LOW);
 					glScalef(1.0/scale, 1.0/scale, 1.0/scale);
 					repeating2DScene(color*0.75 + 0.25);
 				glPopMatrix();
@@ -112,9 +114,9 @@ void draw2D(){
 ///////////////////////////////////
 			// Method B
 			// glPushMatrix();
-			// for(int i = LVL_HIGH-1; i >= LVL_LOW; i--){
+			// for(long i = LVL_HIGH-1; i >= LVL_LOW; i--){
 			// 	float scale = INTERVAL;
-			// 	float color = (i-linearCycle) / (LVL_HIGH-LVL_LOW);
+			// 	float color = (i-zoom) / (LVL_HIGH-LVL_LOW);
 			// 	glScalef(1.0/scale, 1.0/scale, 1.0/scale);
 			// 	repeating2DScene(color*0.75 + 0.25);
 			// }
@@ -125,7 +127,10 @@ void draw2D(){
 }
 
 void draw3D(){ }
-void keyDown(unsigned int key){ }
+void keyDown(unsigned int key){ 
+	if(key == ' ')
+		showHUD = !showHUD;
+}
 void keyUp(unsigned int key){ }
 void mouseDown(unsigned int button){ }
 void mouseUp(unsigned int button){ }
