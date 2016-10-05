@@ -95,8 +95,16 @@ void update(){
 		zoom += ZOOM_SPEED;
 	}
 
+	while(zoom >= 1.0){
+		zoomWhole += 1;
+		zoom -= 1.0;
+	}
+	while(zoom < 0.0){
+		zoomWhole -= 1;
+		zoom += 1.0;
+	}
 	// zoom math
-	zoomWhole = zoom;
+	// zoomWhole = zoom;
 	linearCycle = modf(zoom, &unused);
 	zoomCycle = powf(INTERVAL, linearCycle);
 }

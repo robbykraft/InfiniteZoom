@@ -72,7 +72,15 @@ void update(){
 	}
 
 	// zoom math
-	zoomWhole = zoom;
+	while(zoom >= 1.0){
+		zoomWhole += 1;
+		zoom -= 1.0;
+	}
+	while(zoom < 0.0){
+		zoomWhole -= 1;
+		zoom += 1.0;
+	}
+	// zoomWhole = zoom;
 	linearCycle = modf(zoom, &unused);
 	zoomCycle = powf(INTERVAL, linearCycle);
 }
