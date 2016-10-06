@@ -2,8 +2,8 @@
 
 // space
 #define INTERVAL 3
-long LVL_LOW = 0;
-long LVL_HIGH = 7;
+int LVL_LOW = 0;
+int LVL_HIGH = 7;
 // zoom
 long zoomWhole;
 float zoom = 0;
@@ -17,8 +17,15 @@ static double unused;
 
 void drawHUD(){
 	float thirdW = WIDTH * 0.33;
-	glColor3f(1.0, 1.0, 1.0);
+	// bars
+	glColor3f(0.33, 0.33, 0.33);
+	drawRect(thirdW, 6, 0, thirdW, 15);
+	drawRect(thirdW, 25, 0, thirdW, 15);
+	glColor3f(0.66, 0.66, 0.66);
+	drawRect(thirdW, 6, 0, thirdW*zoom, 15);
+	drawRect(thirdW, 25, 0, thirdW*(zoomCycleScale-1) / (INTERVAL-1), 15);
 	// text
+	glColor3f(1.0, 1.0, 1.0);
 	char zoomString[50], zoomReport[50], zoomReport2[50], oneMinusInterval[50], intervalAsFloat[50];
 	sprintf(zoomString, "ZOOM: %.2f", zoom);
 	text(zoomString, thirdW*2.5-15, 27, 0);
@@ -34,13 +41,6 @@ void drawHUD(){
 	text("1.0", thirdW*2 + 5, 18, 0);
 	sprintf(intervalAsFloat, "%d.0", INTERVAL);
 	text(intervalAsFloat, thirdW*2 + 5, 37, 0);
-	// bars
-	glColor3f(0.66, 0.66, 0.66);
-	drawRect(thirdW, 6, 0, thirdW*zoom, 15);
-	drawRect(thirdW, 25, 0, thirdW*(zoomCycleScale-1) / (INTERVAL-1), 15);
-	glColor3f(0.33, 0.33, 0.33);
-	drawRect(thirdW, 6, 0, thirdW, 15);
-	drawRect(thirdW, 25, 0, thirdW, 15);
 }
 
 void drawGround(){
@@ -88,9 +88,6 @@ void update(){
 
 void draw2D(){
 
-	if(showHUD)
-		drawHUD();
-
 	glPushMatrix(); // TRANSLATE & SCALE: (0,0) to center, screen width to 1.0
 		glTranslatef(WIDTH*0.5, HEIGHT*0.75, 0.0f);
 		glScalef(WIDTH, WIDTH, WIDTH);
@@ -103,7 +100,7 @@ void draw2D(){
 
 ///////////////////////////////////
 			// Method A
-			for(long i = LVL_HIGH-1; i >= LVL_LOW; i--){
+			for(int i = LVL_LOW; i < LVL_HIGH; i++){
 				glPushMatrix();
 					float scale = powf(INTERVAL, i);
 					float color = (i-zoom) / (LVL_HIGH-LVL_LOW);
@@ -124,6 +121,9 @@ void draw2D(){
 ///////////////////////////////////
 		glPopMatrix();  // SCALE: zoom cycle
 	glPopMatrix(); // TRANSLATE & SCALE: (0,0) to center, screen width to 1.0
+
+	if(showHUD)
+		drawHUD();
 }
 
 void draw3D(){ }

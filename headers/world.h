@@ -295,7 +295,9 @@ void display(){
 	glMatrixMode(GL_MODELVIEW);
 	glColor4f(1.0, 1.0, 1.0, 1.0);
 	glPushMatrix();
+		glDisable(GL_DEPTH_TEST);
 		draw2D();
+		glEnable(GL_DEPTH_TEST);
 	glPopMatrix();
 	rebuildProjection();
 

@@ -1,24 +1,31 @@
 #include "../headers/world.h"
 
-// zoom stuff
+// space
 #define INTERVAL 3
 long LVL_LOW = 0;
 long LVL_HIGH = 15;
-
+// zoom
 long zoomWhole;
 float zoom = 0;
 float zoomCycleScale;
-
+// keyboard input
 float ZOOM_SPEED = 0.01;
-
+// graphics
 GLuint texture;
 unsigned char showHUD = 1;
 static double unused;
 
 void drawHUD(){
 	float thirdW = WIDTH * 0.33;
-	glColor3f(1.0, 1.0, 1.0);
+	// bars
+	glColor3f(0.33, 0.33, 0.33);
+	drawRect(thirdW, 6, 0, thirdW, 15);
+	drawRect(thirdW, 25, 0, thirdW, 15);
+	glColor3f(0.66, 0.66, 0.66);
+	drawRect(thirdW, 6, 0, thirdW*zoom, 15);
+	drawRect(thirdW, 25, 0, thirdW*(zoomCycleScale-1) / (INTERVAL-1), 15);
 	// text
+	glColor3f(1.0, 1.0, 1.0);
 	char zoomString[50], zoomReport[50], zoomReport2[50], oneMinusInterval[50], intervalAsFloat[50];
 	sprintf(zoomString, "ZOOM: %.2f", zoom);
 	text(zoomString, thirdW*2.5-15, 27, 0);
@@ -34,13 +41,6 @@ void drawHUD(){
 	text("1.0", thirdW*2 + 5, 18, 0);
 	sprintf(intervalAsFloat, "%d.0", INTERVAL);
 	text(intervalAsFloat, thirdW*2 + 5, 37, 0);
-	// bars
-	glColor3f(0.66, 0.66, 0.66);
-	drawRect(thirdW, 6, 0, thirdW*zoom, 15);
-	drawRect(thirdW, 25, 0, thirdW*(zoomCycleScale-1) / (INTERVAL-1), 15);
-	glColor3f(0.33, 0.33, 0.33);
-	drawRect(thirdW, 6, 0, thirdW, 15);
-	drawRect(thirdW, 25, 0, thirdW, 15);
 }
 
 void repeating3DScene(float brightness){
@@ -131,7 +131,7 @@ void draw3D(){
 		glScalef(30, 30, 30);
 		glScalef(zoomCycleScale, zoomCycleScale, zoomCycleScale);
 
-		for(long i = LVL_HIGH-1; i >= LVL_LOW; i--){
+		for(int i = LVL_LOW; i < LVL_HIGH; i++){
 			glPushMatrix();
 				float scale = powf(INTERVAL, i);
 				float color = (i-zoom) / (LVL_HIGH-LVL_LOW);
