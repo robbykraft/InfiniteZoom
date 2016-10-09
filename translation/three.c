@@ -3,7 +3,7 @@
 // space
 #define INTERVAL 3
 long LVL_LOW = 0;
-long LVL_HIGH = 9;
+long LVL_HIGH = 7;
 int HALF_INTERVAL; // lower bounds of INTERVAL / 2
 unsigned char INTERVAL_IS_ODD;
 // zoom
@@ -15,7 +15,7 @@ float transXLinear, transYLinear;
 float transXExp, transYExp;
 // keyboard input
 float ZOOM_SPEED = 0.02;
-float TRANSLATE_SPEED = 0.001;
+float TRANSLATE_SPEED = 0.00001;
 float TRANSLATE_INTERVAL;
 // graphics
 char zoomReports[9][70];
@@ -66,8 +66,8 @@ void drawHUD(){
 void repeating3DScene(float brightness, unsigned char highlight){ //0 for none, 1/2/3.. to color segments
 	glColor3f(brightness, brightness, brightness);
 
-	float W = 2.0;
-	float TALL = 0.1;
+	float W = 1.0;
+	float TALL = 0.05;
 	float spaceW = (float)W/INTERVAL;
 	float barW = (W*2/3.0)*0.5;
 
@@ -93,13 +93,8 @@ void repeating3DScene(float brightness, unsigned char highlight){ //0 for none, 
 }
 
 void drawGround(){
-	glColor3f(0.25, 0.25, 0.25);
+	glColor3f(0.0, 0.0, 0.0);
 	drawRect(-10.0, -10.0, 0, 20.0, 20.0);
-
-	// glColor3f(1.0, 1.0, 1.0);
-	// glBindTexture(GL_TEXTURE_2D, texture);
-	// drawRect(-1.0, -0.5, 0, 2.0, 1.0);
-	// glBindTexture (GL_TEXTURE_2D, 0);
 }
 
 void setup(){ 
@@ -170,7 +165,7 @@ void draw3D(){
 		// glScalef(WIDTH, WIDTH, WIDTH);
 		// NOW: dimensions are 1.0 = width of screen
 
-		glScalef(30, 30, 30);
+		glScalef(300, 300, 300);
 
 		glPushMatrix();  // SCALE: zoom cycle
 			glScalef(zoomCycleScale, zoomCycleScale, zoomCycleScale);
@@ -193,8 +188,9 @@ void draw3D(){
 					int lvlTransYWhole_OFF = -transYExp / lvlWidth - 0.5*(INTERVAL_IS_ODD);
 					float lvlTransXPart_OFF = modf(-(transXExp)/lvlWidth - 0.5*(INTERVAL_IS_ODD), &unused);
 					float lvlTransYPart_OFF = modf(-(transYExp)/lvlWidth - 0.5*(INTERVAL_IS_ODD), &unused);
-					glTranslatef(-transXExp - (lvlTransXWhole_OFF - 0.5*(!INTERVAL_IS_ODD)) * lvlWidth, 0, 0);
-					glTranslatef(-transYExp - (lvlTransYWhole_OFF - 0.5*(!INTERVAL_IS_ODD)) * lvlWidth, 0, 0);
+					glTranslatef(-transXExp - (lvlTransXWhole_OFF - 0.5*(!INTERVAL_IS_ODD)) * lvlWidth, 
+					             -transYExp - (lvlTransYWhole_OFF - 0.5*(!INTERVAL_IS_ODD)) * lvlWidth, 
+					             0);
 
 					float scale = powf(INTERVAL, i);
 					float color = (i-zoom) / (LVL_HIGH-LVL_LOW);
